@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte Analítico – Comparación de Modelos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0d1117;--surface:#161b22;--border:#30363d;
+    --text:#e6edf3;--muted:#8b949e;
+    --cyan:#00ffff;--green:#00ff88;--blue:#58a6ff;
+    --red:#ff6b6b;--yellow:#ffd700;
+  }
+  body { background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;padding:2rem; }
+  h1 { font-family:'JetBrains Mono',monospace;font-size:1.6rem;color:var(--cyan);margin-bottom:.3rem; }
+  .subtitle { color:var(--muted);font-size:.85rem;margin-bottom:2rem; }
+  .section { margin-bottom:2.5rem; }
+  h2 { font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--blue);border-bottom:1px solid var(--border);padding-bottom:.5rem;margin-bottom:1rem; }
+  h3 { font-size:.9rem;margin-bottom:.5rem; }
+  .cyan { color:var(--cyan); } .green { color:var(--green); }
+  .metrics-table { width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.82rem; }
+  .metrics-table th { background:var(--surface);color:var(--muted);padding:.5rem 1rem;text-align:left;border:1px solid var(--border); }
+  .metrics-table td { padding:.5rem 1rem;border:1px solid var(--border); }
+  .metrics-table tr:nth-child(even) td { background:#0f1419; }
+  .val { text-align:right;font-weight:600;font-size:.9rem; }
+  .metrics-table td.cyan { color:var(--cyan); } .metrics-table td.green { color:var(--green); }
+  .cm-wrap { display:flex;gap:2rem;flex-wrap:wrap; }
+  .cm-block { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.5rem; }
+  .cm-table { border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.85rem;margin-top:.5rem; }
+  .cm-table th,.cm-table td { border:1px solid var(--border);padding:.5rem 1rem;text-align:center; }
+  .cm-table th { background:#21262d;color:var(--muted); }
+  .tp { background:#0d2818;color:#4ade80;font-weight:700; }
+  .tn { background:#1a2540;color:var(--blue);font-weight:700; }
+  .fp { background:#3b1d1d;color:var(--red);font-weight:700; }
+  .fn { background:#3b2600;color:var(--yellow);font-weight:700; }
+  .plots-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:1rem; }
+  .plot-card { background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden; }
+  .plot-card img { width:100%;display:block; }
+  .plot-card p { padding:.4rem .8rem;font-size:.75rem;color:var(--muted); }
+  .cards { display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem; }
+  .card { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.5rem;min-width:160px; }
+  .card .label { font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em; }
+  .card .value { font-size:1.4rem;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:.2rem; }
+  .note { font-size:.75rem;color:var(--muted);font-style:italic; }
+  footer { margin-top:3rem;font-size:.75rem;color:var(--muted);border-top:1px solid var(--border);padding-top:1rem; }
+</style>
+</head>
+<body>
+<h1>🎾 Model Analytics Report</h1>
+<p class="subtitle">antiguo vs NUEVO · Ball Padel Detection · IoU threshold = 0.5 · 1046 imágenes evaluadas</p>
+
+<div class="section">
+  <h2>01 / Summary Scorecards</h2>
+  <div class="cards">
+    <div class="card"><div class="label">antiguo F1</div><div class="value cyan">41.6%</div></div>
+    <div class="card"><div class="label">NUEVO F1</div><div class="value green">90.8%</div></div>
+    <div class="card"><div class="label">antiguo ROC-AUC</div><div class="value cyan">0.638</div></div>
+    <div class="card"><div class="label">NUEVO ROC-AUC</div><div class="value green">0.954</div></div>
+    <div class="card"><div class="label">antiguo Mean IoU</div><div class="value cyan">0.751</div></div>
+    <div class="card"><div class="label">NUEVO Mean IoU</div><div class="value green">0.738</div></div>
+    <div class="card"><div class="label">antiguo Inf.</div><div class="value cyan">15.7ms</div></div>
+    <div class="card"><div class="label">NUEVO Inf.</div><div class="value green">15.6ms</div></div>
+  </div>
+  <p class="note">⚠ ROC-AUC = N/A cuando el dataset de validación tiene solo una clase (e.g., todas las imágenes tienen pelota). Es un problema del split, no del modelo.</p>
+</div>
+
+<div class="section">
+  <h2>02 / Metrics Table</h2>
+  <table class="metrics-table">
+    <thead><tr><th>Metric</th><th>antiguo (cyan)</th><th>NUEVO (green)</th></tr></thead>
+    <tbody>
+        <tr>
+          <td>Accuracy</td>
+          <td class="val cyan">49.38% —</td>
+          <td class="val green">88.29% 🏆</td>
+        </tr>
+        <tr>
+          <td>Precision</td>
+          <td class="val cyan">96.45% 🏆</td>
+          <td class="val green">95.38% —</td>
+        </tr>
+        <tr>
+          <td>Recall</td>
+          <td class="val cyan">26.54% —</td>
+          <td class="val green">86.59% 🏆</td>
+        </tr>
+        <tr>
+          <td>F1-Score</td>
+          <td class="val cyan">41.62% —</td>
+          <td class="val green">90.78% 🏆</td>
+        </tr>
+        <tr>
+          <td>ROC-AUC</td>
+          <td class="val cyan">63.76% —</td>
+          <td class="val green">95.39% 🏆</td>
+        </tr>
+        <tr>
+          <td>Avg Precision (mAP)</td>
+          <td class="val cyan">77.13% —</td>
+          <td class="val green">97.09% 🏆</td>
+        </tr>
+        <tr>
+          <td>Mean IoU</td>
+          <td class="val cyan">75.14% 🏆</td>
+          <td class="val green">73.81% —</td>
+        </tr>
+        <tr>
+          <td>Mean Confidence</td>
+          <td class="val cyan">0.568 —</td>
+          <td class="val green">0.676 🏆</td>
+        </tr>
+        <tr>
+          <td>Inf. Time (ms)</td>
+          <td class="val cyan">15.7 ms —</td>
+          <td class="val green">15.6 ms 🏆</td>
+        </tr></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h2>03 / Confusion Matrices</h2>
+  <div class="cm-wrap">
+    <div class="cm-block">
+      <h3 class="cyan">antiguo – Confusion Matrix</h3>
+      <table class="cm-table">
+        <tr><th></th><th>Pred 0</th><th>Pred 1</th></tr>
+        <tr><td>Act 0</td><td class="tn">TN<br>330</td><td class="fp">FP<br>7</td></tr>
+        <tr><td>Act 1</td><td class="fn">FN<br>526</td><td class="tp">TP<br>190</td></tr>
+      </table>
+    </div>
+    <div class="cm-block">
+      <h3 class="green">NUEVO – Confusion Matrix</h3>
+      <table class="cm-table">
+        <tr><th></th><th>Pred 0</th><th>Pred 1</th></tr>
+        <tr><td>Act 0</td><td class="tn">TN<br>330</td><td class="fp">FP<br>30</td></tr>
+        <tr><td>Act 1</td><td class="fn">FN<br>96</td><td class="tp">TP<br>620</td></tr>
+      </table>
+    </div></div>
+</div>
+
+<div class="section">
+  <h2>04 / Plots</h2>
+  <div class="plots-grid">
+    <div class="plot-card"><img src="plots/metricas_barras.png"><p>Comparación general de métricas y matrices de confusión</p></div>
+    <div class="plot-card"><img src="plots/roc_curve.png"><p>ROC Curve – area bajo la curva</p></div>
+    <div class="plot-card"><img src="plots/pr_curve.png"><p>Precision-Recall Curve – Average Precision</p></div>
+    <div class="plot-card"><img src="plots/iou_distribution.png"><p>Distribución de IoU sobre detecciones válidas</p></div>
+    <div class="plot-card"><img src="plots/inference_time.png"><p>Distribución del tiempo de inferencia por imagen</p></div>
+  </div>
+</div>
+
+<footer>
+  Generado con Ultralytics YOLO · scikit-learn · matplotlib · Videos: 11 archivos en data/videos
+</footer>
+</body>
+</html>

@@ -1,0 +1,100 @@
+# ═══════════════════════════════════════
+# Python
+# ═══════════════════════════════════════
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# UV
+.uv/
+uv.lock
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# ═══════════════════════════════════════
+# Environment variables
+# ═══════════════════════════════════════
+
+.env
+
+# ═══════════════════════════════════════
+# Modelos / IA
+# ═══════════════════════════════════════
+
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# ═══════════════════════════════════════
+# Dataset generado
+# ═══════════════════════════════════════
+dataset/debug/
+dataset/review/
+dataset/processed.txt
+
+upload/
+
+# Opcional:
+# descomenta si NO quieres subir datasets
+
+dataset/images/
+dataset/labels/
+
+# ═══════════════════════════════════════
+# OpenCV / imágenes temporales
+# ═══════════════════════════════════════
+
+*.tmp
+*.cache
+
+# ═══════════════════════════════════════
+# IDEs
+# ═══════════════════════════════════════
+
+.vscode/
+.idea/
+
+# ═══════════════════════════════════════
+# OS
+# ═══════════════════════════════════════
+
+.DS_Store
+Thumbs.db
+
+**/*.jpg
+frames_ball/
+frames_ball/*.jpg
+
+runs_ball/*
+
+data/*
+data/*/*
+data/*/*/*  
+
+data/
+runs_ball/
+
+*.mp4
+*.avi
+*.mov
+*.pt
+*.pth
+*.onnx
+
+runs/
+datasets/
+videos/
+weights/
